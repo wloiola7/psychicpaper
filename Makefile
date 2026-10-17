@@ -17,6 +17,12 @@ else
     FLAGS += -Wno-unused-but-set-variable -isystem IOCFBootleg/include -isystem IOCFBootleg/src
     SRC_C += IOCFBootleg/src/CoreFoundation/*.c IOCFBootleg/src/IOKit/*.c aux/*.c
     SRC_H += IOCFBootleg/src/CoreFoundation/*.h IOCFBootleg/src/device/*.h IOCFBootleg/src/*.h IOCFBootleg/include/CoreFoundation/*.h IOCFBootleg/include/IOKit/*.h IOCFBootleg/include/System/libkern/*.h
+    ifeq ($(HOST_OS),Linux)
+        ifeq ($(origin CC),default)
+            CC := clang
+        endif
+        LDLIBS += -lm
+    endif
 endif
 
 
@@ -25,7 +31,7 @@ endif
 all: $(TARGET)
 
 $(TARGET): $(SRC_C) $(SRC_H)
-	$(CC) -o $@ $(SRC_C) $(FLAGS) $(CFLAGS)
+	$(CC) -o $@ $(SRC_C) $(FLAGS) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 
 clean:
 	rm -f $(TARGET)
