@@ -65,11 +65,7 @@ static void cfj_print_str(common_ctx_t *ctx, const CFStringRef str)
     {
         CFIndex max = len - i,
                 out = 0;
-#ifdef __APPLE__
         CFRange range = CFRangeMake(i, max);
-#else
-        CFRange range = { i, max };
-#endif
         max = CFStringGetBytes(str, range, kCFStringEncodingUTF8, 0, false, (UInt8*)buf, sizeof(buf), &out);
         if(ctx->true_json)
         {
