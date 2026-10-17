@@ -11,20 +11,11 @@ ifndef HOST_OS
     endif
 endif
 
-ifeq ($(HOST_OS),Darwin)
-    FLAGS += -framework CoreFoundation -framework IOKit -framework Security
-else
-    FLAGS += -Wno-unused-but-set-variable -isystem IOCFBootleg/include -isystem IOCFBootleg/src
-    SRC_C += IOCFBootleg/src/CoreFoundation/*.c IOCFBootleg/src/IOKit/*.c aux/*.c
-    SRC_H += IOCFBootleg/src/CoreFoundation/*.h IOCFBootleg/src/device/*.h IOCFBootleg/src/*.h IOCFBootleg/include/CoreFoundation/*.h IOCFBootleg/include/IOKit/*.h IOCFBootleg/include/System/libkern/*.h
-    ifeq ($(HOST_OS),Linux)
-        ifeq ($(origin CC),default)
-            CC := clang
-        endif
-        LDLIBS += -lm
-    endif
+ifneq ($(HOST_OS),Darwin)
+    $(error plparse can only be built on Darwin)
 endif
 
+FLAGS += -framework CoreFoundation -framework IOKit -framework Security
 
 .PHONY: all clean
 
